@@ -1,15 +1,21 @@
-"use client"
-import React from 'react'
+
+import React,{memo} from 'react'
 import Link from "next/link"
+import Button from '../UI/Button'
 const Header = () => {
   return (
-    <div className='container px-5 flex items-center justify-between '  >
+    <div className='container px-5 flex items-center justify-between  py-5  '  >
+      <Link href="/" >
+
       Global Header
-      <Link href="/login" className=' bg-lime-300 text-white px-5 py-2 font-medium rounded-lg  ' >
-        Login
+      </Link>
+      <Link href="/login"  >
+        <Button>
+          Login
+        </Button>
       </Link>
     </div>
   )
 }
 
-export default Header
+export default memo(Header)

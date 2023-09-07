@@ -1,5 +1,5 @@
 import type { Config } from 'tailwindcss'
-
+const plugin = require('tailwindcss/plugin')
 const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
@@ -14,10 +14,33 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       container:{
-        "center":true
+        "center":true,
+        padding: {
+          DEFAULT: '1rem',
+        },
       }
     },
   },
-  plugins: [],
+  plugins: [
+    plugin(function ( {addComponents }:{addComponents:any} ) {
+      addComponents({
+        '.container': {
+          maxWidth: '100%',
+          '@screen sm': {
+            maxWidth: '640px',
+          },
+          '@screen md': {
+            maxWidth: '768px',
+          },
+          '@screen lg': {
+            maxWidth: '1172px',
+          },
+          '@screen xl': {
+            maxWidth: '1172px',
+          },
+        }
+      })
+    })
+  ],
 }
 export default config
