@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from "next/server"
 
 export const middleware = (request: NextRequest) => {
     const path = request.nextUrl.pathname
-    const isPublic = path === "/login" || path === "/register"
+    const isPublic = path === "/login"
     const token: string | undefined = request.cookies.get("video_chat_token")?.value as string | undefined
 
     if (isPublic && token) {
@@ -16,5 +16,5 @@ export const middleware = (request: NextRequest) => {
 }
 
 export const config = {
-    matcher: ['/login', '/dashboard/:path*', "/register"],
+    matcher: ['/login', '/dashboard/:path*'],
 }
