@@ -1,24 +1,14 @@
 "use client"
-import React from 'react'
-import axios from 'axios'
-import nookies from 'nookies'
+import React, { useState } from 'react'
 import Button from '@/Components/UI/Button'
-import { useRouter } from "next/navigation"
-const page = () => {
-  const router = useRouter()
-  const handleSubmit = () => {
-    axios.post("http://localhost:8000/api/v1/login", {
-      email: "user234@gmail.com",
-      password: "password1"
-    })
-      .then(({ data }) => {
-        const oneDay = 24 * 60 * 60 * 1000
-        nookies.set(null, "video_chat_token", data.user.token, {
-          maxAge: oneDay * 3
-        })
-        router.back()
-      }).catch((err) => console.error(err)
-      )
+import { useAuthContext } from '@/Context'
+
+const Page = () => {
+  const { login } = useAuthContext()
+  const [authDetails, setAuthDetails] = useState<{ email: string, password: string }>({ email: "", password: "" })
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+    setAuthDetails(prev => ({ ...prev, name, value }))
   }
   return (
 
@@ -34,6 +24,10 @@ const page = () => {
               className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
               type="email"
               placeholder="Email"
+              value={authDetails.email
+              }
+              name='email'
+              onChange={handleChange}
             />
           </div>
 
@@ -43,11 +37,14 @@ const page = () => {
               className="flex h-10 w-full rounded-md border border-black/30 bg-transparent px-3 py-2 text-sm placeholder:text-gray-600 focus:outline-none focus:ring-1 focus:ring-black/30 focus:ring-offset-1 disabled:cursor-not-allowed disabled:opacity-50"
               type="password"
               placeholder="password"
+              value={authDetails.password}
+              onChange={handleChange}
+              name='password'
             />
           </div>
         </div>
 
-        <Button className=' w-full mt-8 ' >
+        <Button className=' w-full mt-8 ' onClick={() => login?.(authDetails.email, authDetails.password)} >
           Login
         </Button>
       </div>
@@ -55,4 +52,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
