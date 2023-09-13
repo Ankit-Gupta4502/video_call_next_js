@@ -15,7 +15,7 @@ const Header = () => {
           Login
         </Button>
       </Link> : <span>
-        {user!.email}
+        {user.email}
       </span>}
     </div>
   )
