@@ -1,4 +1,4 @@
-import React, { InputHTMLAttributes } from 'react'
+import React, { InputHTMLAttributes,memo } from 'react'
 import { twMerge } from "tailwind-merge"
 interface TInputProps extends InputHTMLAttributes<HTMLInputElement> {
     className?: string,
@@ -16,4 +16,4 @@ const Input = ({ className = "", invalid = false, ...rest }: TInputProps) => {
     )
 }
 
-export default Input
+export default memo(Input)
