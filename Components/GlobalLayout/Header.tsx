@@ -10,7 +10,7 @@ const Header = () => {
       <Link href="/" >
         Global Header
       </Link>
-      {!user!._id ? <Link href="/login"  >
+      {!user._id ? <Link href="/login"  >
         <Button>
           Login
         </Button>

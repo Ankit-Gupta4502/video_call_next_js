@@ -64,7 +64,7 @@ const Page = () => {
           </div>
         </div>
 
-        <Button className=' w-full mt-8 ' onClick={() => authType === "register" ? register?.(authDetails) : login?.(authDetails.email, authDetails.password)} >
+        <Button className=' w-full mt-8 ' onClick={() => authType === "register" ? register(authDetails) : login(authDetails.email, authDetails.password)} >
           {authType === "register" ? "Register" : "Login"}
         </Button>
       </div>

@@ -14,12 +14,17 @@ type TRegisterParams = {
     email: string, name: string, password: string
 }
 type TContextType = {
-    user?: TUserType,
-    login?: (email: string, password: string) => void,
-    register?: ({ email, name, password }: TRegisterParams) => void,
-    errors?: { [key: string]: any }
+    user: TUserType,
+    login: (email: string, password: string) => void,
+    register: ({ email, name, password }: TRegisterParams) => void,
+    errors: { [key: string]: any }
 }
-const Context = createContext<TContextType>({})
+const Context = createContext<TContextType>({
+    user: {},
+    login: (email, password) => undefined,
+    register: ({ email, name, password }) => undefined,
+    errors:{}
+})
 
 const Index = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<TUserType>({})
