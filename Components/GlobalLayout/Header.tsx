@@ -4,13 +4,13 @@ import Link from "next/link"
 import Button from '../UI/Button'
 import { useAuthContext } from '@/Context'
 const Header = () => {
-  const { user, loading } = useAuthContext()
+  const { user } = useAuthContext()
   return (
     <div className='container px-5 flex items-center justify-between  py-5  '  >
       <Link href="/" >
         Global Header
       </Link>
-      {loading ? "wait" : !user._id ? <Link href="/login"  >
+      {!user._id ? <Link href="/login"  >
         <Button>
           Login
         </Button>
