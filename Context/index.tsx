@@ -23,7 +23,7 @@ const Context = createContext<TContextType>({
     user: {},
     login: (email, password) => undefined,
     register: ({ email, name, password }) => undefined,
-    errors:{}
+    errors: {}
 })
 
 const Index = ({ children }: { children: React.ReactNode }) => {
@@ -34,13 +34,11 @@ const Index = ({ children }: { children: React.ReactNode }) => {
         axios.post("/api/v1/login", {
             email,
             password
+        }, {
+            withCredentials: true,
         })
             .then(({ data }: { data: { user: TUserType } }) => {
                 if (data.user.token) {
-                    const oneDay = 24 * 60 * 60 * 1000
-                    nookies.set(null, "video_chat_token", data.user.token, {
-                        maxAge: oneDay * 3
-                    })
                     setUser(data.user)
                     router.back()
                 }
@@ -49,13 +47,11 @@ const Index = ({ children }: { children: React.ReactNode }) => {
     }
 
     const register = ({ name, email, password }: TRegisterParams): undefined => {
-        axios.post("/api/v1/register", { name, email, password })
+        axios.post("/api/v1/register", { name, email, password }, {
+            withCredentials: true
+        })
             .then(({ data }: { data: { user: TUserType } }) => {
                 if (data.user.token) {
-                    const oneDay = 24 * 60 * 60 * 1000
-                    nookies.set(null, "video_chat_token", data.user.token, {
-                        maxAge: oneDay * 3
-                    })
                     setUser(data.user)
                     router.back()
                 }
@@ -71,11 +67,7 @@ const Index = ({ children }: { children: React.ReactNode }) => {
         const cookies = parseCookies()
         const token = cookies?.video_chat_token
         if (token) {
-            axios.get("/api/v1/get-user", {
-                headers: {
-                    Authorization: `Bearer ${token}`
-                }
-            }).then(({ data }) => {
+            axios.get("/api/v1/get-user").then(({ data }) => {
                 setUser({ ...data?.user, token });
             })
                 .catch((err) => console.error(err)

@@ -1,6 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    eslint: true,
+    // eslint: {
+        
+    // },
     async rewrites() {
         return [
             {
