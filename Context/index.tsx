@@ -1,7 +1,6 @@
 "use client"
 import React, { createContext, useContext, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
-import nookies, { parseCookies } from 'nookies'
 import { useRouter } from "next/navigation"
 type TUserType = {
     _id?: number,
@@ -16,20 +15,35 @@ type TRegisterParams = {
 type TContextType = {
     user: TUserType,
     login: (email: string, password: string) => void,
+    logOut: () => void,
     register: ({ email, name, password }: TRegisterParams) => void,
-    errors: { [key: string]: any }
+    errors: { [key: string]: any },
+    loading: boolean
 }
 const Context = createContext<TContextType>({
     user: {},
     login: (email, password) => undefined,
     register: ({ email, name, password }) => undefined,
-    errors: {}
+    errors: {},
+    logOut: () => undefined,
+    loading: true
 })
 
 const Index = ({ children }: { children: React.ReactNode }) => {
     const [user, setUser] = useState<TUserType>({})
     const [errors, setErrors] = useState<{ [key: string]: any }>({})
+    const [loading, setLoading] = useState(true)
     const router = useRouter()
+
+    const logOut = () => {
+        axios("/api/v1/logout")
+            .then(({ data }) => {
+                console.log(data)
+                setUser({})
+            })
+            .catch((err) => console.error(err)
+            )
+    }
     const login = (email: string, password: string) => {
         axios.post("/api/v1/login", {
             email,
@@ -64,19 +78,19 @@ const Index = ({ children }: { children: React.ReactNode }) => {
             })
     }
     useEffect(() => {
-        const cookies = parseCookies()
-        const token = cookies?.video_chat_token
-        if (token) {
-            axios.get("/api/v1/get-user").then(({ data }) => {
-                setUser({ ...data?.user, token });
-            })
-                .catch((err) => console.error(err)
-                )
-        }
 
+        axios.get("/api/v1/get-user").then(({ data }) => {
+            setUser(data.user);
+            setLoading(false)
+        })
+            .catch((err) => {
+                console.error(err)
+                setLoading(false)
+            }
+            )
     }, [])
     return (
-        <Context.Provider value={{ login, user, register, errors }}>
+        <Context.Provider value={{ login, user, register, errors, logOut, loading }}>
             {children}
         </Context.Provider>
     )
